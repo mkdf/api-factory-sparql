@@ -1,0 +1,40 @@
+"/query/{dataset-uuid}/sparql/": {
+    "get": {
+        "tags": [
+            "<?= $tag ?>"
+        ],
+        "summary": "Retrieve sparql",
+        "operationId": "getSparql",
+        "parameters": [
+          {
+              "name": "dataset-uuid",
+            "in": "path",
+            "description": "Dataset name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+            {
+                "name": "query",
+                "in": "query",
+                "description": "The SPARQL query",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+          },
+          "400": {
+                "description": "Bad request or malformed SPARQL"
+          },
+          "500": {
+                "description": "Fatal error"
+          }
+        }
+      }
+    },

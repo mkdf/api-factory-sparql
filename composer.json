@@ -1,0 +1,27 @@
+{
+    "name": "mkdf/api-factory-sparql",
+    "description": "SPARQL addon for api-factory",
+    "type": "library",
+    "require": {
+        "php": "^7.1",
+        "laminas/laminas-component-installer": "^1.0 || ^2.1",
+        "laminas/laminas-development-mode": "^3.2",
+        "laminas/laminas-mvc": "^3.1.1",
+        "mongodb/mongodb": "^1.8",
+        "laminas/laminas-log": "^2.12",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "enridaga",
+            "email": "enricodaga@gmail.com"
+        },
+        {
+            "name": "jasemk",
+            "email": "jase@jasoncarvalho.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

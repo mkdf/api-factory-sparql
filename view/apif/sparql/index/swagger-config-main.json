@@ -1,0 +1,398 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Factory - Object Stream API",
+    "description": "Object Stream API",
+    "termsOfService": "http://datahub.mksmart.org",
+    "contact": {
+      "email": "datahub-support@mksmart.org"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "0.7.0"
+  },
+  "tags": [
+    {
+      "name": "browse",
+      "description": "Browse a dataset, with full control over filters, pagination, sorting"
+    },
+    {
+      "name": "object",
+      "description": "Retrieve, push, update and delete documents"
+    },
+    {
+      "name": "schemas",
+      "description": "Retrieve a schema"
+    }
+  ],
+  "paths": {
+    "/browse/{dataset-uuid}": {
+      "get": {
+        "tags": [
+          "browse"
+        ],
+        "summary": "Retrieve documents from the dataset",
+        "operationId": "browseDocuments",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "dataset uuid identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The filter query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optionally limit the number of documents returned",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Optionally specify fields on which to sort the data. Sort fields should be specified as a comma separated list. Data will be sorted in ascending order. To specify a field to sort in descending order precede that field with a minus ('-')",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Optionally specify which fields to return. Fields should be specified as a comma separated list.  Fields preceded with a minus (\"-\") will be excluded from the results. The \"_id\" field is always returned, unless explicitly excluded.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "Optionally enable pagination and specify page size",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "If using pagination, optionally specify the page number of results to return (defaults to page 1)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request, malformed JSON"
+          },
+          "500": {
+            "description": "Fatal error creating object"
+          }
+        }
+      }
+    },
+    "/object/{dataset-uuid}": {
+      "get": {
+        "tags": [
+          "object"
+        ],
+        "summary": "Retrieve documents from the dataset",
+        "operationId": "getDocuments",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "dataset uuid identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The filter query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optionally limit the number of documents returned",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request, malformed JSON"
+          },
+          "500": {
+            "description": "Fatal error creating object"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "object"
+        ],
+        "summary": "Create a new document in the dataset",
+        "operationId": "createDocument",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "dataset uuid identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The document to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "_id": "1067",
+                  "sensorID": "42-a",
+                  "sensorValue": 34.7
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Object created"
+          },
+          "400": {
+            "description": "Bad request, malformed JSON"
+          },
+          "500": {
+            "description": "Fatal error creating object"
+          }
+        }
+      }
+    },
+    "/object/{dataset-uuid}/{doc_id}": {
+      "get": {
+        "tags": [
+          "object"
+        ],
+        "summary": "Retrieve a single document from the dataset",
+        "operationId": "getDocument",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "dataset uuid identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optionally limit the number of documents returned",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request, malformed JSON"
+          },
+          "500": {
+            "description": "Fatal error creating object"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "object"
+        ],
+        "summary": "Update a document by ID",
+        "description": "Update an existing document, referenced by ID. Note that the existing document will be overwritten, so a full document should be supplied.",
+        "operationId": "updateDocumentById",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "The UUID of the dataset",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The updated document",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Object creted"
+          },
+          "204": {
+            "description": "Object updated"
+          },
+          "500": {
+            "description": "Fatal error creating or updating object"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "object"
+        ],
+        "summary": "Delete a document by ID",
+        "description": "Delete an existing document, referenced by ID.",
+        "operationId": "deleteDocumentById",
+        "parameters": [
+          {
+            "name": "dataset-uuid",
+            "in": "path",
+            "description": "The UUID of the dataset",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No items to delete"
+          },
+          "204": {
+            "description": "Object deleted"
+          },
+          "500": {
+            "description": "Fatal error deleting object"
+          }
+        }
+      }
+    },
+    "/schemas/{schema-id}": {
+      "get": {
+        "tags": [
+          "schemas"
+        ],
+        "summary": "Retrieve schema",
+        "operationId": "getSchema",
+        "parameters": [
+          {
+            "name": "schema-id",
+            "in": "path",
+            "description": "Schema name",
+            "example": "person.json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Schema not found"
+          },
+          "500": {
+            "description": "Fatal error retrieving schema"
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about the API Factory",
+    "url": "http://datahub.mksmart.org"
+  },
+  "servers": [
+    {
+      "url": ""
+    }
+  ],
+  "security": [
+    {
+      "DatasetAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "DatasetAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}
