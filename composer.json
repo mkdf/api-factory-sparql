@@ -5,7 +5,8 @@
     "require": {
         "php": "^7.1",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "semsol/arc2": "dev-master"
     },
     "autoload": {
         "psr-4": {
