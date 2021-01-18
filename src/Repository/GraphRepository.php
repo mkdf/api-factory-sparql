@@ -30,9 +30,6 @@ class GraphRepository implements GraphRepositoryInterface
         else {
             $resultsFormatHeader = $this->_responseTypes['json'];
         }
-
-        print ($resultsFormatHeader);
-
         $url = $this->_baseUrl . $this->_config['sparql']['namespacePrefix'] . $dataset . "/sparql";
         $postFields = "query=" . urlencode($query);
         $curl = curl_init();
