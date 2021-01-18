@@ -4,6 +4,7 @@ namespace APIF\Sparql\Controller\Factory;
 
 use APIF\Sparql\Controller\QueryController;
 use APIF\Sparql\Repository\GraphRepositoryInterface;
+use APIF\Core\Repository\APIFCoreRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
@@ -17,6 +18,7 @@ class QueryControllerFactory implements FactoryInterface
     {
         $config = $container->get("Config");
         $repository = $container->get(GraphRepositoryInterface::class);
-        return new QueryController($repository, $config);
+        $apif_repository = $container->get(APIFCoreRepositoryInterface::class);
+        return new QueryController($repository,$apif_repository,$config);
     }
 }

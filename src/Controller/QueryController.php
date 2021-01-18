@@ -6,18 +6,21 @@ use APIF\Sparql\Repository\GraphRepositoryInterface;
 use ARC2;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use APIF\Core\Service\JsonModel;
+use APIF\Core\Repository\APIFCoreRepositoryInterface;
 
 
 class QueryController extends AbstractRestfulController
 {
     private $_config;
     private $_repository;
+    private $_apif_repository;
     //private $_activityLog;
 
-    public function __construct(GraphRepositoryInterface $repository, array $config)
+    public function __construct(GraphRepositoryInterface $repository, APIFCoreRepositoryInterface $apif_repository, array $config)
     {
         $this->_config = $config;
         $this->_repository = $repository;
+        $this->_apif_repository = $apif_repository;
         //$this->_activityLog = $activityLog;
     }
 
@@ -95,9 +98,8 @@ class QueryController extends AbstractRestfulController
             return new JsonModel(['error' => 'Bad GET request, missing query parameter']);
         }
 
-        if ($this->_repository->checkReadAccess($id, $key, $pwd)) {
+        if ($this->_apif_repository->checkReadAccess($id, $key, $pwd)) {
             //has read access
-
             $acceptedQueryTypes = [
                 'select',
                 'ask',

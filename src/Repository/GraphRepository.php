@@ -15,19 +15,8 @@ class GraphRepository implements GraphRepositoryInterface
         $this->_baseUrl = "http://".$this->_config['sparql']['host'].":".$this->_config['sparql']['port']."/blazegraph/namespace/";
     }
 
-    /**
-     * @param $id
-     * @param $key
-     * @param $pwd
-     * @return bool
-     */
-    public function checkReadAccess($dataset, $key, $pwd): bool
-    {
-        return true;
-    }
-
     public function sparqlQuery ($dataset, $query, $resultsFormat) {
-        $url = $this->_baseUrl . $dataset . "/sparql";
+        $url = $this->_baseUrl . $this->_config['sparql']['namespacePrefix'] . $dataset . "/sparql";
         $postFields = "query=" . urlencode($query);
         $curl = curl_init();
 
