@@ -3,6 +3,7 @@
 namespace APIF\Sparql\Controller;
 
 use APIF\Sparql\Repository\GraphRepositoryInterface;
+use ARC2;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use APIF\Core\Service\JsonModel;
 
@@ -84,6 +85,11 @@ class QueryController extends AbstractRestfulController
         $key = $this->_getAuth()['user'];
         $pwd = $this->_getAuth()['pwd'];
         $queryParam = $this->params()->fromQuery('query', null);
+
+        /* parser instantiation */
+        $parser = ARC2::getSPARQLParser();
+
+
         if (is_null($queryParam)){
             $this->getResponse()->setStatusCode(400);
             return new JsonModel(['error' => 'Bad GET request, missing query parameter']);
@@ -91,13 +97,15 @@ class QueryController extends AbstractRestfulController
 
         if ($this->_repository->checkReadAccess($id, $key, $pwd)) {
             //has read access
+
+
             $data = $this->jsonDecode($this->_repository->sparqlQuery($id,$queryParam,"json"));
             return new JsonModel($data);
         }
         else {
             //doesn't have read access
             $data = [
-                'message' => 'no read access'
+                'message' => 'no read access to this dataset'
             ];
             return new JsonModel($data);
         }
