@@ -98,16 +98,34 @@ class QueryController extends AbstractRestfulController
         if ($this->_repository->checkReadAccess($id, $key, $pwd)) {
             //has read access
 
+            $acceptedQueryTypes = [
+                'select',
+                'ask',
+                'construct'
+            ];
+            $parser->parse($queryParam);
+            if (!$parser->getErrors()) {
+                $q_infos = $parser->getQueryInfos();
+                $queryType = $q_infos['query']['type'];
+                if (!in_array($queryType, $acceptedQueryTypes)) {
+                    $this->getResponse()->setStatusCode(400);
+                    return new JsonModel(['error' => 'sparql query type not allowed. Query must be of type: '.implode(",",$acceptedQueryTypes)]);
+                }
+                //print_r($queryType);
+            }
+            else {
+                //echo "invalid query: " . print_r($parser->getErrors());
+                $this->getResponse()->setStatusCode(400);
+                return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
+            }
 
             $data = $this->jsonDecode($this->_repository->sparqlQuery($id,$queryParam,"json"));
             return new JsonModel($data);
         }
         else {
             //doesn't have read access
-            $data = [
-                'message' => 'no read access to this dataset'
-            ];
-            return new JsonModel($data);
+            $this->getResponse()->setStatusCode(401);
+            return new JsonModel(['error' => 'Unauthorized: You do not have read access to this dataset']);
         }
 
         $data = [
