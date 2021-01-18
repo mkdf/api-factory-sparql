@@ -7,6 +7,7 @@ use ARC2;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use APIF\Core\Service\JsonModel;
 use APIF\Core\Repository\APIFCoreRepositoryInterface;
+use Laminas\View\Model\ViewModel;
 
 
 class QueryController extends AbstractRestfulController
@@ -88,6 +89,7 @@ class QueryController extends AbstractRestfulController
         $key = $this->_getAuth()['user'];
         $pwd = $this->_getAuth()['pwd'];
         $queryParam = $this->params()->fromQuery('query', null);
+        $resultsFormat = $this->params()->fromQuery('format', 'json');
 
         /* parser instantiation */
         $parser = ARC2::getSPARQLParser();
@@ -121,8 +123,9 @@ class QueryController extends AbstractRestfulController
                 return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
             }
 
-            $data = $this->jsonDecode($this->_repository->sparqlQuery($id,$queryParam,"json"));
+            $data = $this->jsonDecode($this->_repository->sparqlQuery($id,$queryParam,$resultsFormat));
             return new JsonModel($data);
+
         }
         else {
             //doesn't have read access
