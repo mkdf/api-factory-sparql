@@ -23,13 +23,27 @@ class GraphRepository implements GraphRepositoryInterface
         ];
     }
 
-    public function sparqlQuery ($dataset, $query, $resultsFormat) {
-        if (array_key_exists($resultsFormat,$this->_responseTypes)) {
-            $resultsFormatHeader = $this->_responseTypes[$resultsFormat];
+    public function sparqlQuery ($dataset, $query, $headers, $resultsFormat) {
+        //get "accept" header from $headers. If not present, set to */*
+        if (array_key_exists('Accept', $headers)) {
+            $resultsFormatHeader = $headers['Accept'];
         }
         else {
-            $resultsFormatHeader = $this->_responseTypes['json'];
+            $resultsFormatHeader = "*/*";
         }
+        //if resultsFormat parameter explicitly passed, overwrite accept header
+        if (!is_null($resultsFormat) && array_key_exists($resultsFormat,$this->_responseTypes)) {
+            $resultsFormatHeader = $this->_responseTypes[$resultsFormat];
+        }
+        $headers['Accept'] = $resultsFormatHeader;
+
+        //format headers for cURL
+        $headersFormatted = array();
+        foreach ($headers as $key => $value) {
+            $headersFormatted[] = $key.': '.$value;
+        }
+
+
         $url = $this->_baseUrl . $this->_config['sparql']['namespacePrefix'] . $dataset . "/sparql";
         $postFields = "query=" . urlencode($query);
         $curl = curl_init();
@@ -44,10 +58,7 @@ class GraphRepository implements GraphRepositoryInterface
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $postFields,
-            CURLOPT_HTTPHEADER => array(
-                "Accept: ".$resultsFormatHeader,
-                "Content-Type: application/x-www-form-urlencoded"
-            ),
+            CURLOPT_HTTPHEADER => $headersFormatted,
         ));
 
         $response = curl_exec($curl);

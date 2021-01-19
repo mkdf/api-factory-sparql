@@ -89,7 +89,8 @@ class QueryController extends AbstractRestfulController
         $key = $this->_getAuth()['user'];
         $pwd = $this->_getAuth()['pwd'];
         $queryParam = $this->params()->fromQuery('query', null);
-        $resultsFormat = $this->params()->fromQuery('format', 'json');
+        $headers = $this->params()->fromHeader();
+        $resultsFormat = $this->params()->fromQuery('format', null);
 
         /* parser instantiation */
         $parser = ARC2::getSPARQLParser();
@@ -123,7 +124,7 @@ class QueryController extends AbstractRestfulController
                 return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
             }
 
-            $response = $this->_repository->sparqlQuery($id,$queryParam,$resultsFormat);
+            $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
             if ($response['response']) {
                 $vm = new ViewModel(['data' => $response['response']]);
                 $this->getResponse()->setStatusCode($response['curlInfo']['http_code']);
