@@ -51,9 +51,16 @@ class GraphRepository implements GraphRepositoryInterface
         ));
 
         $response = curl_exec($curl);
-
+        $curlInfo = null;
+        if (!curl_errno($curl)) {
+            $curlInfo = curl_getinfo($curl);
+        }
         curl_close($curl);
-        return $response;
+        $data = [
+            'response' => $response,
+            'curlInfo' => $curlInfo
+        ];
+        return $data;
     }
 
 

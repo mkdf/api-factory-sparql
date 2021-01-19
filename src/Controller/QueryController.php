@@ -123,10 +123,22 @@ class QueryController extends AbstractRestfulController
                 return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
             }
 
-            $data = $this->_repository->sparqlQuery($id,$queryParam,$resultsFormat);
-            $vm = new ViewModel(['data' => $data]);
-            $vm->setTerminal(true);
-            return $vm;
+            $response = $this->_repository->sparqlQuery($id,$queryParam,$resultsFormat);
+            if ($response['response']) {
+                $vm = new ViewModel(['data' => $response['response']]);
+                $this->getResponse()->setStatusCode($response['curlInfo']['http_code']);
+                $this->getResponse()->getHeaders()->addHeaders([
+                    'Content-Type' => $response['curlInfo']['content_type']
+                ]);
+                $vm->setTerminal(true); //Send response back verbatim, no header/footer padding
+                return $vm;
+            }
+            else {
+                //$response['response'] as false suggests no response from backend graph db
+                $this->getResponse()->setStatusCode(500);
+                return new JsonModel(['error' => 'No response from graph database']);
+            }
+
 
         }
         else {
