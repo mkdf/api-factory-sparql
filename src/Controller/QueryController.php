@@ -123,8 +123,10 @@ class QueryController extends AbstractRestfulController
                 return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
             }
 
-            $data = $this->jsonDecode($this->_repository->sparqlQuery($id,$queryParam,$resultsFormat));
-            return new JsonModel($data);
+            $data = $this->_repository->sparqlQuery($id,$queryParam,$resultsFormat);
+            $vm = new ViewModel(['data' => $data]);
+            $vm->setTerminal(true);
+            return $vm;
 
         }
         else {
