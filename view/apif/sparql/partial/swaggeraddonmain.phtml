@@ -26,9 +26,38 @@
             }
         ],
         "responses": {
-            "200": {
-                "description": "Success"
-          },
+"200": {
+"description": "Query results",
+"content": {
+"application/sparql-results+json": {
+"schema": {
+"type": "object"
+}
+},
+"application/sparql-results+xml": {
+"schema": {
+"type": "object"
+}
+},
+"text/csv": {
+"schema": {
+"type": "string",
+"example": "subject,predicate,object"
+}
+},
+"text/tab-separated-values": {
+"schema": {
+"type": "string",
+"example": "?subject	?predicate	?object"
+}
+},
+"application/x-binary-rdf-results-table": {
+"schema": {
+"format": "binary"
+}
+}
+}
+},
           "400": {
                 "description": "Bad request or malformed SPARQL"
           },
