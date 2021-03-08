@@ -24,8 +24,7 @@ return [
                 'options' => [
                     'route'    => '/query/:id/sparql',
                     'defaults' => [
-                        'controller' => Controller\QueryController::class,
-                        //'action'     => 'query',
+                        'controller' => Controller\QueryController::class
                     ],
                 ],
             ],

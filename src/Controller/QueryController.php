@@ -82,8 +82,8 @@ class QueryController extends AbstractRestfulController
 
     /*
      * GET - Handling a GET request
-     * brings back all docs from a dataset (subject to limit), or a query
-     * if query param is provided
+     * This should handle all requests coming in for this controller.
+     *
      */
     public function get($id) {
         $key = $this->_getAuth()['user'];
