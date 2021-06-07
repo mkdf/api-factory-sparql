@@ -39,10 +39,12 @@ return [
     'service_manager' => [
         'aliases' => [
             Repository\GraphRepositoryInterface::class => Repository\GraphRepository::class,
+            Service\SPARQLQueryTypeInterface::class => Service\SPARQLQueryType::class,
         ],
         'factories' => [
             Repository\GraphRepository::class => Repository\Factory\GraphRepositoryFactory::class,
             Addon\SparqlAddon::class => Addon\Factory\SparqlAddonFactory::class,
+            Service\SPARQLQueryType::class => Service\Factory\SPARQLQueryTypeFactory::class,
         ]
     ],
     'view_manager' => [
