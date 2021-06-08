@@ -3,6 +3,7 @@
 namespace APIF\Sparql\Controller;
 
 use APIF\Sparql\Repository\GraphRepositoryInterface;
+use APIF\Sparql\Service\SPARQLQueryType;
 use APIF\Sparql\Service\SPARQLQueryTypeInterface;
 use ARC2;
 use Laminas\Mvc\Controller\AbstractRestfulController;
@@ -111,6 +112,8 @@ class QueryController extends AbstractRestfulController
                 'ask',
                 'construct'
             ];
+
+            /*
             $parser->parse($queryParam);
             if (!$parser->getErrors()) {
                 $q_infos = $parser->getQueryInfos();
@@ -126,6 +129,10 @@ class QueryController extends AbstractRestfulController
                 $this->getResponse()->setStatusCode(400);
                 return new JsonModel(['error' => 'invalid sparql query', 'details' => json_encode($parser->getErrors())]);
             }
+            */
+            $queryType = SPARQLQueryType::guess($queryParam);
+            print_r($queryType);
+
 
             $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
             if ($response['response']) {
