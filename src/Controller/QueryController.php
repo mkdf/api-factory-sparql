@@ -137,11 +137,8 @@ class QueryController extends AbstractRestfulController
                     return new JsonModel(['error' => 'sparql query type not allowed. Query must be of type: '.implode(",",$acceptedQueryTypes)]);
                 }
             }
-            //print_r($queryType);
-            //echo($queryType);
 
-
-            $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
+                        $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
             if ($response['response']) {
                 $vm = new ViewModel(['data' => $response['response']]);
                 $this->getResponse()->setStatusCode($response['curlInfo']['http_code']);
