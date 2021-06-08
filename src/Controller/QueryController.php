@@ -131,8 +131,14 @@ class QueryController extends AbstractRestfulController
             }
             */
             $queryType = SPARQLQueryType::guess($queryParam);
-            print_r($queryType);
-            echo($queryType);
+            foreach ($queryType as $type) {
+                if (!in_array($type,$acceptedQueryTypes )) {
+                    $this->getResponse()->setStatusCode(400);
+                    return new JsonModel(['error' => 'sparql query type not allowed. Query must be of type: '.implode(",",$acceptedQueryTypes)]);
+                }
+            }
+            //print_r($queryType);
+            //echo($queryType);
 
 
             $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
