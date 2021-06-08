@@ -3,6 +3,7 @@
 namespace APIF\Sparql\Controller;
 
 use APIF\Sparql\Repository\GraphRepositoryInterface;
+use APIF\Sparql\Service\SPARQLQueryTypeInterface;
 use ARC2;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use APIF\Core\Service\JsonModel;
@@ -15,13 +16,15 @@ class QueryController extends AbstractRestfulController
     private $_config;
     private $_repository;
     private $_apif_repository;
+    private $_sparqlTypeChecker;
     //private $_activityLog;
 
-    public function __construct(GraphRepositoryInterface $repository, APIFCoreRepositoryInterface $apif_repository, array $config)
+    public function __construct(GraphRepositoryInterface $repository, APIFCoreRepositoryInterface $apif_repository, SPARQLQueryTypeInterface $sparqlTypeChecker, array $config)
     {
         $this->_config = $config;
         $this->_repository = $repository;
         $this->_apif_repository = $apif_repository;
+        $this->_sparqlTypeChecker = $sparqlTypeChecker;
         //$this->_activityLog = $activityLog;
     }
 

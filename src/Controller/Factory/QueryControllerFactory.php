@@ -20,7 +20,7 @@ class QueryControllerFactory implements FactoryInterface
         $config = $container->get("Config");
         $repository = $container->get(GraphRepositoryInterface::class);
         $apif_repository = $container->get(APIFCoreRepositoryInterface::class);
-        //$sparqlTypeChecker = $container->get(SPARQLQueryTypeInterface::class);
-        return new QueryController($repository,$apif_repository,$config);
+        $sparqlTypeChecker = $container->get(SPARQLQueryTypeInterface::class);
+        return new QueryController($repository,$apif_repository,$sparqlTypeChecker,$config);
     }
 }
