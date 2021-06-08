@@ -132,6 +132,7 @@ class QueryController extends AbstractRestfulController
             */
             $queryType = SPARQLQueryType::guess($queryParam);
             print_r($queryType);
+            echo($queryType);
 
 
             $response = $this->_repository->sparqlQuery($id,$queryParam,$headers,$resultsFormat);
